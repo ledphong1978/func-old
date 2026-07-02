@@ -40,14 +40,35 @@ function functionOld(start, end) {
     }
 
     // --- startMon ---
-    let sm = ((s.getMonth() + (s.getDate()===1?1:2) - 1) % 12) + 1;
+    let sm;
+
+    if (s.getDate() === 1) {
+       sm = s.getMonth() + 1;
+    } else {
+       sm = s.getMonth() + 2;
+    }
+
+    if (sm > 12) sm -= 12;
 
     // --- เงินรายเดือน ---
     const myFunction = (a,sm)=>{
         const lvl = a>=90?1000:a>=80?800:a>=70?700:a>=60?600:0;
         const sp = {59:600,69:700,79:800,89:1000};
         let m = Array(12).fill(lvl);
-        if (sp[a] && sm!==10) for (let i=(sm+2)%12;i<12;i++) m[i]=sp[a];
+        if (sp[a]) {
+
+           m.fill(0);
+
+           let startIndex = sm - 7;
+
+           if (startIndex < 0) {
+               startIndex += 12;
+           }
+
+           for (let i = startIndex; i < 12; i++) {
+              m[i] = sp[a];
+           }
+	}
         return m;
     };
 
